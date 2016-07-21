@@ -13,15 +13,10 @@ export default Base.extend({
     var _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
       var data = { username: credentials.identification, password: credentials.password };
-      _this.makeRequest(_this.serverTokenEndpoint, data).then(function(response) {
-        Ember.run(function() {
-          resolve(response);
-        });
-      }, function(xhr, status, error) {
-        Ember.run(function() {
-          reject();
-        });
-      });
+      return _this.makeRequest(_this.serverTokenEndpoint, data).then(
+        (response) => Ember.run(null, resolve, response), 
+        (xhr) => Ember.run(null, reject, xhr.responseJSON || xhr.responseText)
+      );
     });
   },
 
